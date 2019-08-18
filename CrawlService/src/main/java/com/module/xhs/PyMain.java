@@ -6,22 +6,19 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
+import com.utils.OkHttpUtils;
 import com.utils.StringUtil;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 
 public class PyMain {
 
 	public static void main(String[] args) {
 		try {
 			
+			test_notes();
 			test_User_VfcCode();
 			//checkCode();
 			//userCodeLogin();
@@ -47,7 +44,7 @@ public class PyMain {
 		params.put("device_fingerprint", "20190102161106ec4a4ba2c366f03746775b3f22b0bde9015d1fb51eae3b63");
 		params.put("device_fingerprint1", "20190102161106ec4a4ba2c366f03746775b3f22b0bde9015d1fb51eae3b63");
 		params.put("lang", "zh");
-		params.put("phone", "18681544318");
+		params.put("phone", "18601797216");
 		params.put("platform", "iOS");
 		params.put("sid", "session.1557818110169391090697");
 		params.put("type", "login");
@@ -63,15 +60,55 @@ public class PyMain {
 		xhsGet(api, params, hashMap);
 		
 	}
+
+	//
+	private static void test_notes() throws Exception {
+		HashMap<String, String> params = new LinkedHashMap<String, String>();
+
+		String api = "/api/sns/v8/search/notes";
+//		params.put("allow_rewrite", "1");
+//		params.put("api_extra", "");
+		params.put("deviceId", "7a750e37-f5a7-3936-9205-2a5c6d7c00c4");
+		params.put("device_fingerprint", "20190817142336f77fa88e099b8dc4f874fae662e0bce00188054610d1a4e5");
+		params.put("device_fingerprint1", "20190817142336f77fa88e099b8dc4f874fae662e0bce00188054610d1a4e5");
+		params.put("lang", "zh-Hans");
+		params.put("keyword", "电脑");
+		params.put("channel", "YingYongBao");
+		params.put("filters", "");
+		params.put("page", "1");
+		params.put("versionName", "5.31.0");
+		params.put("page_size", "20");
+		params.put("platform", "android");
+
+		params.put("search_id", "01776AE76A678E55F8C1C6FE9B5184B0");
+		params.put("sort", "");
+		params.put("source", "explore_feed");
+		params.put("t", "1566023421");
+//		params.put("fid", "");
+		params.put("sid", "session.1566023018517656053845");
+		params.put("url", api);
+		params.put("crypt_method", "");
+
+
+		HashMap<String, String> hashMap = XhsModlue.calcSignAndShiled(params);
+
+
+		xhsGet(api, params, hashMap);
+
+	}
 	
 	private static void xhsGet(String api, HashMap<String, String> params, HashMap<String, String> hashMap) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("https://www.xiaohongshu.com").append(api).append("?");
-		for (Map.Entry<String, String> entry : params.entrySet()) {
+		String shield = hashMap.get("shield");
+
+		TreeMap<String, String> treeMap = new TreeMap<>();
+		treeMap.putAll(params);
+		for (Map.Entry<String, String> entry : treeMap.entrySet()) {
 			sb.append(entry.getKey() + "=" + entry.getValue() + "&");
 		}
 		sb.deleteCharAt(sb.length() - 1);
-		requestGet(sb.toString(), hashMap.get("shiled"));
+		requestGet(sb.toString(), shield);
 		
 	}
 
@@ -85,7 +122,7 @@ public class PyMain {
 		query.put("device_fingerprint", "20190102161106ec4a4ba2c366f03746775b3f22b0bde9015d1fb51eae3b63");
 		query.put("device_fingerprint1", "20190102161106ec4a4ba2c366f03746775b3f22b0bde9015d1fb51eae3b63");
 		query.put("lang", "zh");
-		query.put("phone", "18681544318");
+		query.put("phone", "15021353196");
 		query.put("platform", "iOS");
 		query.put("sid", "session.1557818110169391090697");
 		query.put("zone", "86");
@@ -364,20 +401,16 @@ public class PyMain {
 	}
 
 	private static void requestGet(String requestUrl, String shiled) {
-		try {
-			OkHttpClient okHttpClient = new OkHttpClient();
-			final Request request = new Request.Builder().url(requestUrl)
-					.header("Authorization", "session.1547780789878540128")
-					.header("device_id", "425cef0d-33bb-374e-bdc3-deda9c344722")
-					.header("User-Agent",
-							"Dalvik/1.6.0 (Linux; U; Android 4.4.4; HM2014811 Build/KTU84Q) Resolution/720*1280 Version/5.22.0 Build/5220137 Device/(Xiaomi;HM2014811)")
-					.header("shield", shiled).build();
-			Call call = okHttpClient.newCall(request);
-			Response response = call.execute();
-			System.out.println("onResponse: " + response.body().string());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		System.out.println(requestUrl);
+		System.out.println(shiled);
+		HashMap<String, String> map = new HashMap<>();
+		map.put("Authorization", "session.1566023018517656053845");
+		map.put("device_id", "7a750e37-f5a7-3936-9205-2a5c6d7c00c4");
+		map.put("X-Tingyun-Id", "LbxHzUNcfig;c=2;r=252749325;u=ac863a143788f6e7abbdb671c0ea027b9edb240a1200d0f29c9b24f05d65500295e46212744819255f61a7ba7429fa08::7E24F92475EF682C");
+		map.put("User-Agent",
+						"Dalvik/2.1.0 (Linux; U; Android 7.1.2; Redmi 5 Plus MIUI/8.11.2) Resolution/1080*2030 Version/5.21.0 Build/5210121 Device/(Xiaomi;Redmi 5 Plus)");
+		map.put("shield", shiled);
+		OkHttpUtils.httpGetWithProxy(requestUrl, map);
 	}
 	
 	
@@ -386,7 +419,6 @@ public class PyMain {
 			OkHttpClient okHttpClient = new OkHttpClient();
 			final Request request = new Request.Builder().url(requestUrl)
 					.header("Authorization", "session.1547780789878540128")
-					.header("device_id", "425cef0d-33bb-374e-bdc3-deda9c344722")
 					.header("User-Agent",
 							"Dalvik/1.6.0 (Linux; U; Android 4.4.4; HM2014811 Build/KTU84Q) Resolution/720*1280 Version/5.22.0 Build/5220137 Device/(Xiaomi;HM2014811)")
 					.header("shield", shiled).build();

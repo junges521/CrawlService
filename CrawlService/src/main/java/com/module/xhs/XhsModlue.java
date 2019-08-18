@@ -20,8 +20,9 @@ public class XhsModlue {
 		String sign = calcSign(paramsCalc);
 		paramsCalc.put("sign", sign);
 		String shiled = calShiled(url, crypt_method, paramsCalc);
+		System.out.println(shiled);
 		result.put("sign", sign);
-		result.put("shiled", shiled);
+		result.put("shield", shiled);
 
 		return result;
 		
@@ -72,7 +73,8 @@ public class XhsModlue {
 			params = URLEncoder.encode(params, "UTF-8");
 	
 			if(crypt_method=="" || crypt_method.isEmpty()) {
-				return S4(params);
+				System.out.println("params11111111111111:"+ params);
+				return S2(params);
 			}
 			
 			byte[] data = StringUtil.toByteArray(crypt_method);		
@@ -118,7 +120,7 @@ public class XhsModlue {
 		MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 		sha256.reset();
 		sha256.update(data);
-		return StringUtil.hex2LowerString(sha256.digest());
+		return StringUtil.toHexString(sha256.digest());
 	}
 	private static String S2(String params) throws Exception {
 		MessageDigest messageDigest = MessageDigest.getInstance("MD5");

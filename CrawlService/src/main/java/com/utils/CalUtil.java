@@ -66,7 +66,6 @@ public class CalUtil {
 	 * 
 	 * @param datasource
 	 *            byte[]
-	 * @param password
 	 *            String
 	 * @return byte[]
 	 */
@@ -90,7 +89,6 @@ public class CalUtil {
 	 * 
 	 * @param src
 	 *            byte[]
-	 * @param password
 	 *            String
 	 * @return byte[]
 	 * @throws Exception
